@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Field Notes &mdash; Capston</title>
+  <meta name="description" content="Field notes from Capston on operational infrastructure, the built world, and how work actually gets done." />
+  <link rel="canonical" href="https://capston.com/field-notes" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #eeebe5;
+      --bg-warm:   #f0ede7;
+      --bg-dim:    #e8e4dc;
+      --bg-dark:   #221e14;
+      --bg-footer: #b8860b;
+      --border:    rgba(30,24,12,.12);
+      --divider:   rgba(30,24,12,.16);
+      --text:      #1a1712;
+      --muted:     #5a5248;
+      --faint:     #9a948a;
+      --inv:       #f5f2ec;
+      --inv-muted: rgba(245,242,236,.65);
+      --gold:      #b8860b;
+      --gold-lt:   #d4a017;
+      --gold-dk:   #7a5808;
+      --serif:     'Playfair Display', Georgia, serif;
+      --sans:      'Inter', system-ui, sans-serif;
+      --xs:   clamp(.7rem,  .65rem + .2vw,  .8rem);
+      --sm:   clamp(.8rem,  .75rem + .25vw, .9rem);
+      --base: clamp(.875rem,.82rem + .25vw, 1rem);
+      --md:   clamp(1rem,   .92rem + .35vw, 1.125rem);
+      --lg:   clamp(1.15rem,1.05rem + .5vw, 1.4rem);
+      --xl:   clamp(1.6rem, 1.2rem + 1.5vw, 2.5rem);
+      --2xl:  clamp(2.2rem, 1.2rem + 2.8vw, 4rem);
+      --ease: 200ms cubic-bezier(.16,1,.3,1);
+      --content: 1080px;
+      --prose: 680px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+    body { font-family: var(--sans); font-size: var(--base); line-height: 1.65; color: var(--text); background: var(--bg); -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    button { font: inherit; cursor: pointer; border: none; background: none; }
+    img, svg { display: block; max-width: 100%; }
+    h1,h2,h3,h4 { line-height: 1.06; text-wrap: balance; }
+    p, li { text-wrap: pretty; }
+
+    .wrap { width: min(calc(100% - 3rem), var(--content)); margin: 0 auto; }
+    .skip-link { position:absolute; left:1rem; top:-40px; background:var(--gold); color:var(--text); padding:.5rem 1rem; border-radius:9999px; z-index:100; font-size:var(--sm); }
+    .skip-link:focus { top:1rem; }
+
+    /* NAV */
+    .header { position: sticky; top: 0; z-index: 40; background: var(--bg); border-bottom: 1px solid var(--border); }
+    .nav { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1.5rem; padding: .85rem 0; }
+    .nav-logo { display: flex; align-items: center; gap: .45rem; font-weight: 700; font-size: 1.05rem; letter-spacing: -.01em; color: var(--text); }
+    .starburst { width: 24px; height: 24px; color: var(--gold); flex-shrink: 0; }
+    .nav-links { display: flex; align-items: center; justify-content: center; gap: 1.75rem; }
+    .nav-links a { font-size: var(--sm); color: var(--muted); transition: color var(--ease); position: relative; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.active { color: var(--text); }
+    .nav-links a.active::after { content:""; position:absolute; inset:-.15rem -.55rem; border:1px solid var(--text); border-radius:9999px; pointer-events:none; }
+    .nav-cta { display: inline-flex; align-items: center; gap: .35rem; padding: .48rem 1rem; border: 1px solid var(--text); border-radius: 9999px; font-size: var(--sm); font-weight: 500; color: var(--text); transition: all var(--ease); white-space: nowrap; }
+    .nav-cta:hover { background: var(--text); color: var(--bg); }
+
+    /* BLOG HEADER */
+    .blog-header { padding: clamp(2.5rem,6vw,4rem) 0 clamp(1.5rem,3vw,2.5rem); border-bottom: 1px solid var(--border); }
+    .blog-eyebrow { font-size: var(--xs); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold-dk); margin-bottom: .75rem; }
+    .blog-title { font-family: var(--serif); font-size: var(--2xl); font-weight: 400; letter-spacing: -.025em; margin-bottom: .75rem; }
+    .blog-desc { font-size: var(--md); color: var(--muted); max-width: 52ch; line-height: 1.65; }
+
+    /* ARTICLE LIST */
+    .article-list { padding: clamp(1.5rem,4vw,3rem) 0 clamp(3rem,7vw,5rem); }
+    .article-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 1.5rem; align-items: start; padding: 1.5rem 0; border-bottom: 1px solid var(--border); transition: background var(--ease); }
+    .article-item:first-child { border-top: 1px solid var(--border); }
+    .article-item-link { display: contents; }
+    .article-meta { display: flex; align-items: center; gap: .75rem; margin-bottom: .5rem; flex-wrap: wrap; }
+    .article-tag { font-size: var(--xs); font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--gold-dk); }
+    .article-date { font-size: var(--xs); color: var(--faint); }
+    .article-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--faint); flex-shrink: 0; }
+    .article-h { font-family: var(--serif); font-size: var(--lg); font-weight: 400; letter-spacing: -.015em; color: var(--text); margin-bottom: .45rem; line-height: 1.2; transition: color var(--ease); }
+    .article-item:hover .article-h { color: var(--gold-dk); }
+    .article-excerpt { font-size: var(--sm); color: var(--muted); line-height: 1.6; max-width: 60ch; }
+    .article-arrow { font-size: var(--lg); color: var(--faint); transition: all var(--ease); padding-top: .15rem; flex-shrink: 0; align-self: center; }
+    .article-item:hover .article-arrow { color: var(--gold); transform: translateX(3px); }
+    .article-item a { cursor: pointer; }
+    .article-item-wrap { display: block; text-decoration: none; color: inherit; }
+
+    /* FOOTER */
+    .footer { background: var(--gold); padding: 2.5rem 0 1.5rem; }
+    .footer-top { display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: start; padding-bottom: 2rem; border-bottom: 1px solid rgba(30,20,0,.15); margin-bottom: 1.25rem; }
+    .footer-logo { display: flex; align-items: center; gap: .45rem; font-weight: 800; font-size: 1.35rem; letter-spacing: -.02em; color: var(--text); }
+    .footer-nav { display: flex; flex-direction: column; gap: .45rem; }
+    .footer-nav-label { font-size: var(--xs); font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: rgba(30,20,0,.45); margin-bottom: .2rem; }
+    .footer-nav a { font-size: var(--sm); color: var(--text); opacity: .7; transition: opacity var(--ease); }
+    .footer-nav a:hover { opacity: 1; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .75rem; font-size: var(--xs); color: rgba(30,20,0,.45); }
+    .footer-bottom a { color: inherit; opacity: .7; }
+    .footer-bottom a:hover { opacity: 1; }
+
+    /* REVEAL */
+    .r { opacity: 0; transform: translateY(12px); transition: opacity 600ms ease, transform 600ms ease; }
+    .r.v { opacity: 1; transform: none; }
+
+    @media (max-width: 720px) {
+      .nav { grid-template-columns: 1fr auto; }
+      .nav-links { display: none; }
+      .article-item { grid-template-columns: 1fr; gap: .5rem; }
+      .article-arrow { display: none; }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .wrap { width: min(calc(100% - 2rem), var(--content)); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .r { opacity: 1; transform: none; transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="header">
+    <div class="wrap nav">
+      <a href="capston-pov-v7.html" class="nav-logo" aria-label="Capston home">
+        <svg class="starburst" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+          <path d="M13 2l1.5 4.8L19 4l-2.5 4.5L21 10l-4.8 1.5L18 16l-4-3-1 5-1-5-4 3 1.8-4.5L2 10l4.5-1.5L4 4l4.5 2.8L13 2z" fill="currentColor"/>
+        </svg>
+        capston
+      </a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="capston-pov-v7.html">Home</a>
+        <a href="capston-pov-v7.html">Point of View</a>
+        <a href="capston-blog.html" class="active">Field Notes</a>
+        <a href="capston-discussion.html">Inflection Summit</a>
+      </nav>
+      <a class="nav-cta" href="capston-discussion.html">Start a Discussion &rarr;</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap">
+
+      <header class="blog-header r v">
+        <div class="blog-eyebrow">Field Notes</div>
+        <h1 class="blog-title">From the field.</h1>
+        <p class="blog-desc">Field notes from Capston on operational infrastructure, the built world, and how work actually gets done.</p>
+      </header>
+
+      <section class="article-list" aria-label="Articles">
+
+        <article class="article-item r v">
+          <a class="article-item-wrap" href="capston-article.html">
+            <div class="article-meta">
+              <span class="article-tag">Operations</span>
+              <span class="article-dot" aria-hidden="true"></span>
+              <time class="article-date" datetime="2026-03-28">March 28, 2026</time>
+            </div>
+            <h2 class="article-h">Why operational knowledge disappears &mdash; and what to do before it does</h2>
+            <p class="article-excerpt">The most valuable knowledge in any infrastructure organization rarely lives in a system. It lives in people. Here is how to start closing that gap before the next wave of retirements.</p>
+          </a>
+          <span class="article-arrow" aria-hidden="true">&rarr;</span>
+        </article>
+
+        <article class="article-item r">
+          <a class="article-item-wrap" href="capston-article.html">
+            <div class="article-meta">
+              <span class="article-tag">Workflow</span>
+              <span class="article-dot" aria-hidden="true"></span>
+              <time class="article-date" datetime="2026-03-14">March 14, 2026</time>
+            </div>
+            <h2 class="article-h">The spreadsheet is not the problem</h2>
+            <p class="article-excerpt">Teams that rely on spreadsheets are not failing. They are succeeding with the tools available to them. The question is what comes next &mdash; and how you get there without breaking what works.</p>
+          </a>
+          <span class="article-arrow" aria-hidden="true">&rarr;</span>
+        </article>
+
+        <article class="article-item r">
+          <a class="article-item-wrap" href="capston-article.html">
+            <div class="article-meta">
+              <span class="article-tag">Technology</span>
+              <span class="article-dot" aria-hidden="true"></span>
+              <time class="article-date" datetime="2026-02-27">February 27, 2026</time>
+            </div>
+            <h2 class="article-h">Fit first: why most operational software fails before it launches</h2>
+            <p class="article-excerpt">Implementation failure is almost never a technical problem. It is a fit problem. Software that does not match how teams actually work does not get used &mdash; no matter how good the demo was.</p>
+          </a>
+          <span class="article-arrow" aria-hidden="true">&rarr;</span>
+        </article>
+
+        <article class="article-item r">
+          <a class="article-item-wrap" href="capston-article.html">
+            <div class="article-meta">
+              <span class="article-tag">Built World</span>
+              <span class="article-dot" aria-hidden="true"></span>
+              <time class="article-date" datetime="2026-02-12">February 12, 2026</time>
+            </div>
+            <h2 class="article-h">What infrastructure operators can teach the rest of us about coordination</h2>
+            <p class="article-excerpt">The teams keeping water systems, utilities, and transit infrastructure running have developed hard-won coordination practices that most software companies have never thought to study.</p>
+          </a>
+          <span class="article-arrow" aria-hidden="true">&rarr;</span>
+        </article>
+
+        <article class="article-item r">
+          <a class="article-item-wrap" href="capston-article.html">
+            <div class="article-meta">
+              <span class="article-tag">Operations</span>
+              <span class="article-dot" aria-hidden="true"></span>
+              <time class="article-date" datetime="2026-01-30">January 30, 2026</time>
+            </div>
+            <h2 class="article-h">The handoff problem: where operational work breaks down most often</h2>
+            <p class="article-excerpt">Most operational failures are not dramatic events. They are quiet handoff failures &mdash; work that moved from one person to another and lost something critical along the way.</p>
+          </a>
+          <span class="article-arrow" aria-hidden="true">&rarr;</span>
+        </article>
+
+        <article class="article-item r">
+          <a class="article-item-wrap" href="capston-article.html">
+            <div class="article-meta">
+              <span class="article-tag">Workflow</span>
+              <span class="article-dot" aria-hidden="true"></span>
+              <time class="article-date" datetime="2026-01-16">January 16, 2026</time>
+            </div>
+            <h2 class="article-h">One workflow at a time: why focused improvement beats transformation programs</h2>
+            <p class="article-excerpt">Large-scale operational transformation programs have a poor track record. The organizations that improve most consistently do it differently &mdash; one workflow, one problem, one team at a time.</p>
+          </a>
+          <span class="article-arrow" aria-hidden="true">&rarr;</span>
+        </article>
+
+        <article class="article-item r">
+          <a class="article-item-wrap" href="capston-article.html">
+            <div class="article-meta">
+              <span class="article-tag">Technology</span>
+              <span class="article-dot" aria-hidden="true"></span>
+              <time class="article-date" datetime="2025-12-19">December 19, 2025</time>
+            </div>
+            <h2 class="article-h">Human judgment is not a bug to be engineered away</h2>
+            <p class="article-excerpt">There is a growing assumption that AI will eventually remove the need for human judgment in operational settings. We think this is wrong &mdash; and dangerously so in high-stakes environments.</p>
+          </a>
+          <span class="article-arrow" aria-hidden="true">&rarr;</span>
+        </article>
+
+        <article class="article-item r">
+          <a class="article-item-wrap" href="capston-article.html">
+            <div class="article-meta">
+              <span class="article-tag">Built World</span>
+              <span class="article-dot" aria-hidden="true"></span>
+              <time class="article-date" datetime="2025-12-04">December 4, 2025</time>
+            </div>
+            <h2 class="article-h">Aging assets, younger teams: the expertise gap no one is solving fast enough</h2>
+            <p class="article-excerpt">Across utilities, municipalities, and infrastructure operators, the same problem is playing out in slow motion: experienced people are leaving and the knowledge transfer is not happening.</p>
+          </a>
+          <span class="article-arrow" aria-hidden="true">&rarr;</span>
+        </article>
+
+        <article class="article-item r">
+          <a class="article-item-wrap" href="capston-article.html">
+            <div class="article-meta">
+              <span class="article-tag">Operations</span>
+              <span class="article-dot" aria-hidden="true"></span>
+              <time class="article-date" datetime="2025-11-20">November 20, 2025</time>
+            </div>
+            <h2 class="article-h">What we mean when we say &ldquo;operational leverage&rdquo;</h2>
+            <p class="article-excerpt">Leverage in operations is not about doing more with less. It is about making the work that matters most easier to do well, easier to hand off, and easier to improve over time.</p>
+          </a>
+          <span class="article-arrow" aria-hidden="true">&rarr;</span>
+        </article>
+
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer-top">
+        <div class="footer-logo">
+          <svg width="20" height="20" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+            <path d="M13 2l1.5 4.8L19 4l-2.5 4.5L21 10l-4.8 1.5L18 16l-4-3-1 5-1-5-4 3 1.8-4.5L2 10l4.5-1.5L4 4l4.5 2.8L13 2z" fill="currentColor"/>
+          </svg>
+          capston
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <div class="footer-nav-label">Index</div>
+          <a href="capston-pov-v7.html">Home</a>
+          <a href="capston-pov-v7.html">Point of View</a>
+          <a href="capston-blog.html">Field Notes</a>
+          <a href="capston-discussion.html">Inflection Summit</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Capston. All rights reserved.</span>
+        <div style="display:flex;gap:1.25rem">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const obs = new IntersectionObserver(
+        entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('v'); }),
+        { threshold: 0.05 }
+      );
+      document.querySelectorAll('.r:not(.v)').forEach(el => obs.observe(el));
+    })();
+  </script>
+</body>
+</html>

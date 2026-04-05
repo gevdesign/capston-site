@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Start a Discussion &mdash; Capston</title>
+  <meta name="description" content="Talk to Capston about a workflow that is getting in the way. We respond within one business day." />
+  <link rel="canonical" href="https://capston.com/discussion" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #eeebe5;
+      --bg-warm:   #f0ede7;
+      --bg-dim:    #e8e4dc;
+      --bg-dark:   #221e14;
+      --border:    rgba(30,24,12,.12);
+      --divider:   rgba(30,24,12,.16);
+      --text:      #1a1712;
+      --muted:     #5a5248;
+      --faint:     #9a948a;
+      --inv:       #f5f2ec;
+      --inv-muted: rgba(245,242,236,.65);
+      --gold:      #b8860b;
+      --gold-lt:   #d4a017;
+      --gold-dk:   #7a5808;
+      --error:     #8b2500;
+      --serif:     'Playfair Display', Georgia, serif;
+      --sans:      'Inter', system-ui, sans-serif;
+      --xs:   clamp(.7rem,  .65rem + .2vw,  .8rem);
+      --sm:   clamp(.8rem,  .75rem + .25vw, .9rem);
+      --base: clamp(.875rem,.82rem + .25vw, 1rem);
+      --md:   clamp(1rem,   .92rem + .35vw, 1.125rem);
+      --lg:   clamp(1.15rem,1.05rem + .5vw, 1.4rem);
+      --xl:   clamp(1.6rem, 1.2rem + 1.5vw, 2.5rem);
+      --2xl:  clamp(2rem,   1rem + 2.5vw,   3.6rem);
+      --ease: 200ms cubic-bezier(.16,1,.3,1);
+      --content: 1080px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+    body { font-family: var(--sans); font-size: var(--base); line-height: 1.65; color: var(--text); background: var(--bg); -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    button { font: inherit; cursor: pointer; border: none; background: none; }
+    img, svg { display: block; max-width: 100%; }
+    h1,h2,h3 { line-height: 1.08; text-wrap: balance; }
+    p { text-wrap: pretty; }
+
+    .wrap { width: min(calc(100% - 3rem), var(--content)); margin: 0 auto; }
+    .skip-link { position:absolute; left:1rem; top:-40px; background:var(--gold); color:var(--text); padding:.5rem 1rem; border-radius:9999px; z-index:100; font-size:var(--sm); }
+    .skip-link:focus { top:1rem; }
+
+    /* NAV */
+    .header { position: sticky; top: 0; z-index: 40; background: var(--bg); border-bottom: 1px solid var(--border); }
+    .nav { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1.5rem; padding: .85rem 0; }
+    .nav-logo { display: flex; align-items: center; gap: .45rem; font-weight: 700; font-size: 1.05rem; letter-spacing: -.01em; color: var(--text); }
+    .starburst { width: 24px; height: 24px; color: var(--gold); flex-shrink: 0; }
+    .nav-links { display: flex; align-items: center; justify-content: center; gap: 1.75rem; }
+    .nav-links a { font-size: var(--sm); color: var(--muted); transition: color var(--ease); position: relative; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.active { color: var(--text); }
+    .nav-links a.active::after { content:""; position:absolute; inset:-.15rem -.55rem; border:1px solid var(--text); border-radius:9999px; pointer-events:none; }
+    .nav-cta { display: inline-flex; align-items: center; gap: .35rem; padding: .48rem 1rem; border: 1px solid var(--text); border-radius: 9999px; font-size: var(--sm); font-weight: 500; color: var(--text); transition: all var(--ease); white-space: nowrap; background: var(--text); color: var(--bg); }
+    .nav-cta:hover { opacity: .85; }
+
+    /* PAGE LAYOUT */
+    .page { padding: clamp(3rem,7vw,5rem) 0 clamp(4rem,9vw,7rem); }
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+      gap: clamp(3rem,6vw,6rem);
+      align-items: start;
+    }
+
+    /* LEFT COLUMN */
+    .page-eyebrow { font-size: var(--xs); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold-dk); margin-bottom: .85rem; }
+    .page-h { font-family: var(--serif); font-size: var(--2xl); font-weight: 400; letter-spacing: -.025em; margin-bottom: 1.25rem; line-height: 1.08; }
+    .page-body { font-size: var(--md); color: var(--muted); line-height: 1.7; max-width: 40ch; margin-bottom: 2.5rem; }
+    .page-body em { font-style: normal; color: var(--text); font-weight: 500; }
+
+    .direct-contact { display: grid; gap: 1.25rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+    .direct-label { font-size: var(--xs); font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); }
+    .direct-email { display: inline-flex; align-items: center; gap: .5rem; font-size: var(--md); font-weight: 500; color: var(--gold-dk); transition: color var(--ease); }
+    .direct-email:hover { color: var(--gold); }
+    .direct-email svg { width: 16px; height: 16px; flex-shrink: 0; }
+    .direct-note { font-size: var(--sm); color: var(--faint); line-height: 1.55; max-width: 32ch; }
+
+    /* FORM */
+    .form-card {
+      background: var(--bg-warm);
+      border: 1px solid var(--border);
+      padding: clamp(1.75rem,4vw,2.5rem);
+    }
+    .form-title { font-family: var(--serif); font-size: var(--lg); font-weight: 400; letter-spacing: -.015em; margin-bottom: .35rem; }
+    .form-sub { font-size: var(--sm); color: var(--muted); margin-bottom: 2rem; line-height: 1.55; }
+
+    .field { display: grid; gap: .4rem; margin-bottom: 1.25rem; }
+    .field:last-of-type { margin-bottom: 1.5rem; }
+    label { font-size: var(--sm); font-weight: 500; color: var(--text); }
+    label .req { color: var(--gold); margin-left: .2rem; font-size: .7rem; }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: .65rem .85rem;
+      font-family: var(--sans);
+      font-size: var(--base);
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      transition: border-color var(--ease), box-shadow var(--ease);
+      line-height: 1.5;
+    }
+    input::placeholder, textarea::placeholder { color: var(--faint); }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--gold-dk);
+      box-shadow: 0 0 0 3px rgba(184,134,11,.12);
+    }
+    input.invalid, textarea.invalid {
+      border-color: var(--error);
+      box-shadow: 0 0 0 3px rgba(139,37,0,.1);
+    }
+    textarea { resize: vertical; min-height: 120px; }
+    .field-error { font-size: var(--xs); color: var(--error); display: none; }
+    .field-error.show { display: block; }
+
+    .form-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .form-disclaimer { font-size: var(--xs); color: var(--faint); max-width: 28ch; line-height: 1.5; }
+
+    .btn-submit {
+      display: inline-flex; align-items: center; gap: .45rem;
+      padding: .75rem 1.5rem;
+      background: var(--text);
+      color: var(--bg);
+      font-size: var(--sm); font-weight: 600;
+      border: 1px solid var(--text);
+      border-radius: 9999px;
+      transition: all var(--ease);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-submit:hover { background: var(--bg-dark); border-color: var(--bg-dark); }
+    .btn-submit:active { transform: scale(.98); }
+    .btn-submit:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+    .btn-submit svg { width: 14px; height: 14px; transition: transform var(--ease); }
+    .btn-submit:not(:disabled):hover svg { transform: translateX(3px); }
+
+    /* SUCCESS STATE */
+    .form-success {
+      display: none;
+      padding: 2rem;
+      text-align: center;
+      border: 1px solid rgba(184,134,11,.25);
+      background: rgba(184,134,11,.05);
+    }
+    .form-success.show { display: block; }
+    .success-icon { width: 40px; height: 40px; margin: 0 auto 1rem; color: var(--gold); }
+    .success-h { font-family: var(--serif); font-size: var(--lg); font-weight: 400; margin-bottom: .5rem; }
+    .success-body { font-size: var(--sm); color: var(--muted); line-height: 1.6; }
+
+    /* WHAT TO EXPECT */
+    .expect { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border); display: grid; gap: .75rem; }
+    .expect-label { font-size: var(--xs); font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); }
+    .expect-items { display: grid; gap: .5rem; }
+    .expect-item { display: flex; align-items: baseline; gap: .6rem; font-size: var(--sm); color: var(--muted); }
+    .expect-item::before { content:""; width:.3rem; height:.3rem; border-radius:50%; background:var(--gold); flex-shrink:0; margin-top:.45rem; }
+
+    /* FOOTER */
+    .footer { background: #b8860b; padding: 2.5rem 0 1.5rem; }
+    .footer-top { display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: start; padding-bottom: 2rem; border-bottom: 1px solid rgba(30,20,0,.15); margin-bottom: 1.25rem; }
+    .footer-logo { display: flex; align-items: center; gap: .45rem; font-weight: 800; font-size: 1.35rem; letter-spacing: -.02em; color: var(--text); }
+    .footer-nav { display: flex; flex-direction: column; gap: .45rem; }
+    .footer-nav-label { font-size: var(--xs); font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: rgba(30,20,0,.45); margin-bottom: .2rem; }
+    .footer-nav a { font-size: var(--sm); color: var(--text); opacity: .7; transition: opacity var(--ease); }
+    .footer-nav a:hover { opacity: 1; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .75rem; font-size: var(--xs); color: rgba(30,20,0,.45); }
+    .footer-bottom a { color: inherit; opacity: .7; }
+    .footer-bottom a:hover { opacity: 1; }
+
+    @media (max-width: 800px) {
+      .nav { grid-template-columns: 1fr auto; }
+      .nav-links { display: none; }
+      .page-grid { grid-template-columns: 1fr; }
+      .page-body { max-width: none; }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .wrap { width: min(calc(100% - 2rem), var(--content)); }
+      .form-footer { flex-direction: column; align-items: flex-start; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="header">
+    <div class="wrap nav">
+      <a href="capston-pov-v7.html" class="nav-logo" aria-label="Capston home">
+        <svg class="starburst" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+          <path d="M13 2l1.5 4.8L19 4l-2.5 4.5L21 10l-4.8 1.5L18 16l-4-3-1 5-1-5-4 3 1.8-4.5L2 10l4.5-1.5L4 4l4.5 2.8L13 2z" fill="currentColor"/>
+        </svg>
+        capston
+      </a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="capston-pov-v7.html">Home</a>
+        <a href="capston-pov-v7.html">Point of View</a>
+        <a href="capston-blog.html">Field Notes</a>
+        <a href="capston-discussion.html">Inflection Summit</a>
+      </nav>
+      <a class="nav-cta" href="capston-discussion.html" aria-current="page">Start a Discussion</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap page">
+      <div class="page-grid">
+
+        <!-- LEFT: CONTEXT -->
+        <div>
+          <div class="page-eyebrow">Start a Discussion</div>
+          <h1 class="page-h">Tell us about a workflow that is getting in the way.</h1>
+          <p class="page-body">We are building early relationships with asset owners, operators, and teams responsible for infrastructure. We are not here to pitch you a platform &mdash; we are here to <em>understand the work.</em></p>
+
+          <div class="direct-contact">
+            <div class="direct-label">Prefer email directly</div>
+            <a class="direct-email" href="mailto:hello@capston.com">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+                <rect x="1" y="3" width="14" height="10" rx="1"/>
+                <path d="M1 4l7 5 7-5"/>
+              </svg>
+              hello@capston.com
+            </a>
+            <p class="direct-note">We respond within one business day. No automated replies.</p>
+          </div>
+        </div>
+
+        <!-- RIGHT: FORM -->
+        <div>
+          <div class="form-card" id="form-region">
+
+            <div id="form-wrapper">
+              <h2 class="form-title">Get in touch</h2>
+              <p class="form-sub">Three fields. No commitment. Just a conversation.</p>
+
+              <form id="discussion-form" novalidate>
+
+                <div class="field">
+                  <label for="name">Name <span class="req" aria-hidden="true">*</span></label>
+                  <input type="text" id="name" name="name" autocomplete="name" placeholder="Your name" required />
+                  <span class="field-error" id="name-error" role="alert">Please enter your name.</span>
+                </div>
+
+                <div class="field">
+                  <label for="email">Work email <span class="req" aria-hidden="true">*</span></label>
+                  <input type="email" id="email" name="email" autocomplete="email" placeholder="you@yourorg.com" required />
+                  <span class="field-error" id="email-error" role="alert">Please enter a valid email address.</span>
+                </div>
+
+                <div class="field">
+                  <label for="message">What is the workflow or problem? <span class="req" aria-hidden="true">*</span></label>
+                  <textarea id="message" name="message" placeholder="Describe a workflow that feels slow, manual, fragmented, or hard to hand off. As much or as little context as you like." required></textarea>
+                  <span class="field-error" id="message-error" role="alert">Please tell us a little about your situation.</span>
+                </div>
+
+                <div class="form-footer">
+                  <p class="form-disclaimer">We read every message and respond within one business day.</p>
+                  <button type="submit" class="btn-submit" id="submit-btn">
+                    Send message
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="M1 7h12M8 2l5 5-5 5"/>
+                    </svg>
+                  </button>
+                </div>
+
+              </form>
+            </div>
+
+            <!-- SUCCESS -->
+            <div class="form-success" id="form-success" role="status" aria-live="polite">
+              <svg class="success-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <circle cx="20" cy="20" r="18"/>
+                <path d="M12 20l6 6 10-12" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <h2 class="success-h">Message sent.</h2>
+              <p class="success-body">We will be in touch within one business day. In the meantime, take a look at what we have been writing about.</p>
+              <a href="capston-blog.html" style="display:inline-block;margin-top:1.25rem;font-size:var(--sm);color:var(--gold-dk);border-bottom:1px solid rgba(122,88,8,.25);">Read Field Notes &rarr;</a>
+            </div>
+
+            <div class="expect">
+              <div class="expect-label">What to expect</div>
+              <div class="expect-items">
+                <div class="expect-item">A response from a real person within one business day</div>
+                <div class="expect-item">A short conversation to understand the context</div>
+                <div class="expect-item">No sales deck, no pitch, no pressure</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer-top">
+        <div class="footer-logo">
+          <svg width="20" height="20" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+            <path d="M13 2l1.5 4.8L19 4l-2.5 4.5L21 10l-4.8 1.5L18 16l-4-3-1 5-1-5-4 3 1.8-4.5L2 10l4.5-1.5L4 4l4.5 2.8L13 2z" fill="currentColor"/>
+          </svg>
+          capston
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <div class="footer-nav-label">Index</div>
+          <a href="capston-pov-v7.html">Home</a>
+          <a href="capston-pov-v7.html">Point of View</a>
+          <a href="capston-blog.html">Field Notes</a>
+          <a href="capston-discussion.html">Inflection Summit</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Capston. All rights reserved.</span>
+        <div style="display:flex;gap:1.25rem">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const form = document.getElementById('discussion-form');
+      const wrapper = document.getElementById('form-wrapper');
+      const success = document.getElementById('form-success');
+      const submitBtn = document.getElementById('submit-btn');
+
+      function showError(inputId, errorId, show) {
+        const input = document.getElementById(inputId);
+        const error = document.getElementById(errorId);
+        if (show) {
+          input.classList.add('invalid');
+          error.classList.add('show');
+          input.setAttribute('aria-describedby', errorId);
+        } else {
+          input.classList.remove('invalid');
+          error.classList.remove('show');
+          input.removeAttribute('aria-describedby');
+        }
+      }
+
+      function validateEmail(val) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+      }
+
+      // Live validation on blur
+      document.getElementById('name').addEventListener('blur', function () {
+        showError('name', 'name-error', !this.value.trim());
+      });
+      document.getElementById('email').addEventListener('blur', function () {
+        showError('email', 'email-error', !validateEmail(this.value.trim()));
+      });
+      document.getElementById('message').addEventListener('blur', function () {
+        showError('message', 'message-error', !this.value.trim());
+      });
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const message = document.getElementById('message').value.trim();
+
+        let valid = true;
+        showError('name', 'name-error', !name); if (!name) valid = false;
+        showError('email', 'email-error', !validateEmail(email)); if (!validateEmail(email)) valid = false;
+        showError('message', 'message-error', !message); if (!message) valid = false;
+
+        if (!valid) {
+          // Focus first invalid field
+          const firstInvalid = form.querySelector('.invalid');
+          if (firstInvalid) firstInvalid.focus();
+          return;
+        }
+
+        // Disable button while "sending"
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending\u2026';
+
+        // Simulate send — replace this with your actual form endpoint (Formspree, etc.)
+        setTimeout(function () {
+          wrapper.style.display = 'none';
+          success.classList.add('show');
+          success.focus();
+        }, 900);
+      });
+    })();
+  </script>
+</body>
+</html>

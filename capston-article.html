@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Why operational knowledge disappears &mdash; Field Notes &mdash; Capston</title>
+  <meta name="description" content="The most valuable knowledge in any infrastructure organization rarely lives in a system. It lives in people. Here is how to start closing that gap." />
+  <link rel="canonical" href="https://capston.com/field-notes/operational-knowledge" />
+  <!-- Open Graph for sharing -->
+  <meta property="og:title" content="Why operational knowledge disappears &mdash; and what to do before it does" />
+  <meta property="og:description" content="The most valuable knowledge in any infrastructure organization rarely lives in a system. It lives in people." />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2026-03-28" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #eeebe5;
+      --bg-warm:   #f0ede7;
+      --bg-dim:    #e8e4dc;
+      --bg-dark:   #221e14;
+      --bg-footer: #b8860b;
+      --border:    rgba(30,24,12,.12);
+      --divider:   rgba(30,24,12,.16);
+      --text:      #1a1712;
+      --muted:     #5a5248;
+      --faint:     #9a948a;
+      --inv:       #f5f2ec;
+      --inv-muted: rgba(245,242,236,.65);
+      --gold:      #b8860b;
+      --gold-lt:   #d4a017;
+      --gold-dk:   #7a5808;
+      --serif:     'Playfair Display', Georgia, serif;
+      --sans:      'Inter', system-ui, sans-serif;
+      --xs:   clamp(.7rem,  .65rem + .2vw,  .8rem);
+      --sm:   clamp(.8rem,  .75rem + .25vw, .9rem);
+      --base: clamp(.875rem,.82rem + .25vw, 1rem);
+      --md:   clamp(1rem,   .92rem + .35vw, 1.125rem);
+      --lg:   clamp(1.15rem,1.05rem + .5vw, 1.4rem);
+      --xl:   clamp(1.6rem, 1.2rem + 1.5vw, 2.5rem);
+      --2xl:  clamp(2rem,   1rem + 2.5vw,   3.5rem);
+      --ease: 200ms cubic-bezier(.16,1,.3,1);
+      --content: 1080px;
+      --prose: 660px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+    body { font-family: var(--sans); font-size: var(--base); line-height: 1.65; color: var(--text); background: var(--bg); -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    button { font: inherit; cursor: pointer; border: none; background: none; }
+    img, svg { display: block; max-width: 100%; }
+    h1,h2,h3,h4 { line-height: 1.1; text-wrap: balance; }
+    p, li { text-wrap: pretty; }
+
+    .wrap { width: min(calc(100% - 3rem), var(--content)); margin: 0 auto; }
+    .skip-link { position:absolute; left:1rem; top:-40px; background:var(--gold); color:var(--text); padding:.5rem 1rem; border-radius:9999px; z-index:100; font-size:var(--sm); }
+    .skip-link:focus { top:1rem; }
+
+    /* NAV */
+    .header { position: sticky; top: 0; z-index: 40; background: var(--bg); border-bottom: 1px solid var(--border); }
+    .nav { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1.5rem; padding: .85rem 0; }
+    .nav-logo { display: flex; align-items: center; gap: .45rem; font-weight: 700; font-size: 1.05rem; letter-spacing: -.01em; color: var(--text); }
+    .starburst { width: 24px; height: 24px; color: var(--gold); flex-shrink: 0; }
+    .nav-links { display: flex; align-items: center; justify-content: center; gap: 1.75rem; }
+    .nav-links a { font-size: var(--sm); color: var(--muted); transition: color var(--ease); position: relative; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.active { color: var(--text); }
+    .nav-links a.active::after { content:""; position:absolute; inset:-.15rem -.55rem; border:1px solid var(--text); border-radius:9999px; pointer-events:none; }
+    .nav-cta { display: inline-flex; align-items: center; gap: .35rem; padding: .48rem 1rem; border: 1px solid var(--text); border-radius: 9999px; font-size: var(--sm); font-weight: 500; color: var(--text); transition: all var(--ease); white-space: nowrap; }
+    .nav-cta:hover { background: var(--text); color: var(--bg); }
+
+    /* ARTICLE LAYOUT */
+    .article-wrap { max-width: var(--prose); margin: 0 auto; padding: 0 clamp(1rem,3vw,1.5rem); }
+
+    /* BREADCRUMB */
+    .breadcrumb { padding: 1.25rem 0 0; }
+    .breadcrumb-inner { display: flex; align-items: center; gap: .5rem; font-size: var(--xs); color: var(--faint); }
+    .breadcrumb a { color: var(--faint); transition: color var(--ease); }
+    .breadcrumb a:hover { color: var(--muted); }
+    .breadcrumb-sep { font-size: .65rem; }
+
+    /* ARTICLE HEADER */
+    .article-header { padding: 2rem 0 2.5rem; border-bottom: 1px solid var(--border); margin-bottom: 2.5rem; }
+    .article-meta { display: flex; align-items: center; gap: .75rem; margin-bottom: 1.1rem; flex-wrap: wrap; }
+    .article-tag { font-size: var(--xs); font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--gold-dk); }
+    .article-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--faint); flex-shrink: 0; }
+    .article-date { font-size: var(--xs); color: var(--faint); }
+    .article-read { font-size: var(--xs); color: var(--faint); }
+    .article-h1 { font-family: var(--serif); font-size: var(--2xl); font-weight: 400; letter-spacing: -.025em; line-height: 1.1; margin-bottom: 1rem; }
+    .article-lede { font-size: var(--md); color: var(--muted); line-height: 1.7; max-width: 58ch; }
+
+    /* PROSE */
+    .prose { font-size: var(--md); line-height: 1.75; color: var(--text); }
+    .prose p { margin-bottom: 1.4rem; max-width: 68ch; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose h2 { font-family: var(--serif); font-size: var(--xl); font-weight: 400; letter-spacing: -.02em; margin: 2.5rem 0 1rem; }
+    .prose h3 { font-size: var(--lg); font-weight: 600; letter-spacing: -.01em; margin: 2rem 0 .75rem; }
+    .prose ul, .prose ol { padding-left: 1.4rem; margin-bottom: 1.4rem; display: grid; gap: .5rem; }
+    .prose li { line-height: 1.65; max-width: 64ch; }
+    .prose ul li::marker { color: var(--gold); }
+    .prose blockquote { border-left: 2px solid var(--gold); padding-left: 1.25rem; margin: 2rem 0; font-family: var(--serif); font-style: italic; font-size: var(--lg); color: var(--muted); line-height: 1.5; }
+    .prose blockquote p { margin-bottom: 0; max-width: 52ch; }
+    .prose strong { font-weight: 600; color: var(--text); }
+    .prose a { color: var(--gold-dk); border-bottom: 1px solid rgba(122,88,8,.25); transition: border-color var(--ease); }
+    .prose a:hover { border-color: var(--gold-dk); }
+    .prose hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+
+    /* ARTICLE FOOTER */
+    .article-footer { margin-top: 3rem; padding: 2rem 0; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .article-author { display: flex; align-items: center; gap: .75rem; }
+    .author-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--bg-dim); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; }
+    .author-avatar svg { width: 18px; height: 18px; color: var(--faint); }
+    .author-info { display: grid; gap: .1rem; }
+    .author-name { font-size: var(--sm); font-weight: 500; }
+    .author-label { font-size: var(--xs); color: var(--faint); }
+    .back-link { display: inline-flex; align-items: center; gap: .4rem; font-size: var(--sm); color: var(--muted); transition: color var(--ease); }
+    .back-link:hover { color: var(--text); }
+
+    /* NEXT ARTICLE */
+    .next-article { background: var(--bg-warm); border-top: 1px solid var(--border); padding: clamp(2rem,5vw,3.5rem) 0; }
+    .next-label { font-size: var(--xs); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); margin-bottom: .75rem; }
+    .next-link { display: inline-block; }
+    .next-h { font-family: var(--serif); font-size: var(--xl); font-weight: 400; letter-spacing: -.02em; color: var(--text); line-height: 1.15; transition: color var(--ease); max-width: 40ch; }
+    .next-link:hover .next-h { color: var(--gold-dk); }
+    .next-arrow { font-size: var(--lg); color: var(--faint); margin-top: .5rem; display: block; transition: all var(--ease); }
+    .next-link:hover .next-arrow { color: var(--gold); transform: translateX(4px); }
+
+    /* FOOTER */
+    .footer { background: var(--gold); padding: 2.5rem 0 1.5rem; }
+    .footer-top { display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: start; padding-bottom: 2rem; border-bottom: 1px solid rgba(30,20,0,.15); margin-bottom: 1.25rem; }
+    .footer-logo { display: flex; align-items: center; gap: .45rem; font-weight: 800; font-size: 1.35rem; letter-spacing: -.02em; color: var(--text); }
+    .footer-nav { display: flex; flex-direction: column; gap: .45rem; }
+    .footer-nav-label { font-size: var(--xs); font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: rgba(30,20,0,.45); margin-bottom: .2rem; }
+    .footer-nav a { font-size: var(--sm); color: var(--text); opacity: .7; transition: opacity var(--ease); }
+    .footer-nav a:hover { opacity: 1; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .75rem; font-size: var(--xs); color: rgba(30,20,0,.45); }
+    .footer-bottom a { color: inherit; opacity: .7; }
+    .footer-bottom a:hover { opacity: 1; }
+
+    @media (max-width: 720px) {
+      .nav { grid-template-columns: 1fr auto; }
+      .nav-links { display: none; }
+      .footer-top { grid-template-columns: 1fr; }
+      .article-footer { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 480px) {
+      .wrap { width: min(calc(100% - 2rem), var(--content)); }
+      .article-wrap { padding: 0; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="header">
+    <div class="wrap nav">
+      <a href="capston-pov-v7.html" class="nav-logo" aria-label="Capston home">
+        <svg class="starburst" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+          <path d="M13 2l1.5 4.8L19 4l-2.5 4.5L21 10l-4.8 1.5L18 16l-4-3-1 5-1-5-4 3 1.8-4.5L2 10l4.5-1.5L4 4l4.5 2.8L13 2z" fill="currentColor"/>
+        </svg>
+        capston
+      </a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="capston-pov-v7.html">Home</a>
+        <a href="capston-pov-v7.html">Point of View</a>
+        <a href="capston-blog.html" class="active">Field Notes</a>
+        <a href="capston-discussion.html">Inflection Summit</a>
+      </nav>
+      <a class="nav-cta" href="capston-discussion.html">Start a Discussion &rarr;</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap">
+      <div class="article-wrap">
+
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <div class="breadcrumb-inner">
+            <a href="capston-blog.html">Field Notes</a>
+            <span class="breadcrumb-sep" aria-hidden="true">›</span>
+            <span>Operations</span>
+          </div>
+        </nav>
+
+        <header class="article-header">
+          <div class="article-meta">
+            <span class="article-tag">Operations</span>
+            <span class="article-dot" aria-hidden="true"></span>
+            <time class="article-date" datetime="2026-03-28">March 28, 2026</time>
+            <span class="article-dot" aria-hidden="true"></span>
+            <span class="article-read">6 min read</span>
+          </div>
+          <h1 class="article-h1">Why operational knowledge disappears &mdash; and what to do before it does</h1>
+          <p class="article-lede">The most valuable knowledge in any infrastructure organization rarely lives in a system. It lives in people. Here is how to start closing that gap before the next wave of retirements.</p>
+        </header>
+
+        <article class="prose">
+          <p>There is a pattern playing out across utilities, municipalities, and infrastructure operators that most organizations are aware of but few are acting on with any urgency. An experienced engineer or operator retires. Their replacement is hired. And somewhere in that transition, a significant amount of operational knowledge simply disappears.</p>
+
+          <p>Not all of it. The documented procedures survive. The formal training gets passed along. But the knowledge that actually makes operations run well &mdash; the judgment calls, the workarounds, the early warning signs that only come from years of watching a particular system &mdash; that knowledge is almost never captured, and almost never transferred effectively.</p>
+
+          <h2>What gets lost and why</h2>
+
+          <p>The knowledge that disappears in workforce transitions tends to fall into a few categories. The first is <strong>contextual knowledge</strong>: why a particular process works the way it does, what has been tried before, what constraints shaped the current approach. This kind of knowledge rarely makes it into documentation because it feels like history rather than instruction.</p>
+
+          <p>The second is <strong>exception knowledge</strong>: how to handle the situations that fall outside normal procedures. Experienced operators have a mental library of edge cases and failure modes that took years to build. Formal procedures rarely capture this in any useful way.</p>
+
+          <p>The third, and perhaps most valuable, is <strong>early signal knowledge</strong>: the ability to recognize that something is about to go wrong before the systems flag it. This is pattern recognition built from experience, and it is nearly impossible to document in a way that transfers effectively.</p>
+
+          <blockquote>
+            <p>The most dangerous gap is not the one that shows up in the org chart. It is the one that shows up three years after someone retires, when no one can explain why a system behaves the way it does.</p>
+          </blockquote>
+
+          <h2>Why documentation alone does not work</h2>
+
+          <p>The standard organizational response to knowledge risk is documentation. Write it down before someone leaves. This instinct is correct but insufficient. Documentation captures what people know they know. It does not capture what they know but have never thought to articulate &mdash; the vast majority of practical operational knowledge.</p>
+
+          <p>There is also a timing problem. Organizations typically start thinking about knowledge capture when someone has already announced their retirement. At that point, you have weeks or months to extract knowledge that took decades to accumulate. The math does not work.</p>
+
+          <p>Effective knowledge transfer requires an ongoing process, not a departure protocol. It requires systems and workflows that make knowledge capture a natural part of how work gets done, rather than a separate exercise that competes with the actual work.</p>
+
+          <h2>A more practical approach</h2>
+
+          <p>The organizations that handle this best tend to share a few characteristics. They treat knowledge capture as an operational function, not an HR function. They use structured processes for capturing decision rationale alongside decisions, not just the decisions themselves. And they build workflows that create knowledge artifacts as a byproduct of work, rather than as an additional step after the work is done.</p>
+
+          <p>In practice, this means:</p>
+
+          <ul>
+            <li>Capturing the reasoning behind decisions at the point when they are made, not retrospectively</li>
+            <li>Creating structured handoff processes that surface tacit knowledge explicitly</li>
+            <li>Building systems that make it easy to annotate procedures with exception cases as they are encountered</li>
+            <li>Designing workflows that pair experienced operators with less experienced ones on complex tasks, with explicit knowledge transfer as a goal</li>
+          </ul>
+
+          <p>None of this is novel in principle. The gap is in execution &mdash; specifically, in having systems and workflows that make these practices sustainable at the pace of real operational work.</p>
+
+          <h2>Where to start</h2>
+
+          <p>The most useful first step is usually an honest assessment of where your organization is most vulnerable. Not in general terms, but specifically: which roles, which systems, which workflows carry the highest concentration of tacit knowledge with the highest turnover risk in the next three to five years?</p>
+
+          <p>That assessment tends to surface two or three areas where the risk is both high and actionable. Starting there &mdash; with focused effort on a single workflow or role &mdash; is almost always more productive than a broad knowledge management initiative.</p>
+
+          <p>The organizations that make the most progress on this problem are the ones that treat it as an operational challenge rather than a change management challenge. The question is not how to get people to change their behavior. The question is how to design the work itself so that knowledge capture happens as a natural part of doing it.</p>
+
+          <hr>
+
+          <p>This is one of the problems Capston is building toward. If it is relevant to something your team is working on, we would be glad to talk through it.</p>
+        </article>
+
+        <footer class="article-footer">
+          <div class="article-author">
+            <div class="author-avatar" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+              </svg>
+            </div>
+            <div class="author-info">
+              <div class="author-name">Capston</div>
+              <div class="author-label">Writing from the team</div>
+            </div>
+          </div>
+          <a class="back-link" href="capston-blog.html">← Back to Field Notes</a>
+        </footer>
+
+      </div>
+    </div>
+
+    <!-- NEXT ARTICLE -->
+    <section class="next-article" aria-label="Next article">
+      <div class="wrap">
+        <div class="article-wrap">
+          <div class="next-label">Next</div>
+          <a class="next-link" href="capston-blog.html">
+            <div class="next-h">The spreadsheet is not the problem</div>
+            <span class="next-arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer-top">
+        <div class="footer-logo">
+          <svg width="20" height="20" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+            <path d="M13 2l1.5 4.8L19 4l-2.5 4.5L21 10l-4.8 1.5L18 16l-4-3-1 5-1-5-4 3 1.8-4.5L2 10l4.5-1.5L4 4l4.5 2.8L13 2z" fill="currentColor"/>
+          </svg>
+          capston
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <div class="footer-nav-label">Index</div>
+          <a href="capston-pov-v7.html">Home</a>
+          <a href="capston-pov-v7.html">Point of View</a>
+          <a href="capston-blog.html">Field Notes</a>
+          <a href="capston-discussion.html">Inflection Summit</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Capston. All rights reserved.</span>
+        <div style="display:flex;gap:1.25rem">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
