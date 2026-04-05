@@ -73,7 +73,7 @@
 
     /* ARTICLE LIST */
     .article-list { padding: clamp(1.5rem,4vw,3rem) 0 clamp(3rem,7vw,5rem); }
-    .article-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 1.5rem; align-items: start; padding: 1.5rem 0; border-bottom: 1px solid var(--border); transition: background var(--ease); }
+    .article-item { display: grid; grid-template-columns: minmax(0,1fr) auto auto; gap: 1.5rem; align-items: center; padding: 1.5rem 0; border-bottom: 1px solid var(--border); transition: background var(--ease); }
     .article-item:first-child { border-top: 1px solid var(--border); }
     .article-item-link { display: contents; }
     .article-meta { display: flex; align-items: center; gap: .75rem; margin-bottom: .5rem; flex-wrap: wrap; }
@@ -83,6 +83,9 @@
     .article-h { font-family: var(--serif); font-size: var(--lg); font-weight: 400; letter-spacing: -.015em; color: var(--text); margin-bottom: .45rem; line-height: 1.2; transition: color var(--ease); }
     .article-item:hover .article-h { color: var(--gold-dk); }
     .article-excerpt { font-size: var(--sm); color: var(--muted); line-height: 1.6; max-width: 60ch; }
+    .article-thumb { width: 160px; height: 100px; background: var(--bg-dim); border: 1px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .article-thumb svg { width: 28px; height: 28px; color: var(--faint); opacity: .45; }
+    .article-item:hover .article-thumb { border-color: rgba(30,24,12,.2); }
     .article-arrow { font-size: var(--lg); color: var(--faint); transition: all var(--ease); padding-top: .15rem; flex-shrink: 0; align-self: center; }
     .article-item:hover .article-arrow { color: var(--gold); transform: translateX(3px); }
     .article-item a { cursor: pointer; }
@@ -108,6 +111,7 @@
       .nav { grid-template-columns: 1fr auto; }
       .nav-links { display: none; }
       .article-item { grid-template-columns: 1fr; gap: .5rem; }
+      .article-thumb { display: none; }
       .article-arrow { display: none; }
       .footer-top { grid-template-columns: 1fr; }
     }
@@ -161,6 +165,7 @@
             <h2 class="article-h">Why operational knowledge disappears. And what to do before it does</h2>
             <p class="article-excerpt">The most valuable knowledge in any infrastructure organization rarely lives in a system. It lives in people. Here is how to start closing that gap before the next wave of retirements.</p>
           </a>
+          <div class="article-thumb" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="8.5" cy="10.5" r="2"/><path d="M22 16l-5.5-5.5L10 17"/></svg></div>
           <span class="article-arrow" aria-hidden="true">&rarr;</span>
         </article>
 
@@ -174,6 +179,7 @@
             <h2 class="article-h">The spreadsheet is not the problem</h2>
             <p class="article-excerpt">Teams that rely on spreadsheets are not failing. They are succeeding with the tools available to them. The question is what comes next. And how you get there without breaking what works.</p>
           </a>
+          <div class="article-thumb" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="8.5" cy="10.5" r="2"/><path d="M22 16l-5.5-5.5L10 17"/></svg></div>
           <span class="article-arrow" aria-hidden="true">&rarr;</span>
         </article>
 
@@ -187,6 +193,7 @@
             <h2 class="article-h">Fit first: why most operational software fails before it launches</h2>
             <p class="article-excerpt">Implementation failure is almost never a technical problem. It is a fit problem. Software that does not match how teams actually work does not get used. No matter how good the demo was.</p>
           </a>
+          <div class="article-thumb" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="8.5" cy="10.5" r="2"/><path d="M22 16l-5.5-5.5L10 17"/></svg></div>
           <span class="article-arrow" aria-hidden="true">&rarr;</span>
         </article>
 
@@ -200,6 +207,7 @@
             <h2 class="article-h">What infrastructure operators can teach the rest of us about coordination</h2>
             <p class="article-excerpt">The teams keeping water systems, utilities, and transit infrastructure running have developed hard-won coordination practices that most software companies have never thought to study.</p>
           </a>
+          <div class="article-thumb" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="8.5" cy="10.5" r="2"/><path d="M22 16l-5.5-5.5L10 17"/></svg></div>
           <span class="article-arrow" aria-hidden="true">&rarr;</span>
         </article>
 
@@ -213,6 +221,7 @@
             <h2 class="article-h">The handoff problem: where operational work breaks down most often</h2>
             <p class="article-excerpt">Most operational failures are not dramatic events. They are quiet handoff failures. Work that moved from one person to another and lost something critical along the way.</p>
           </a>
+          <div class="article-thumb" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="8.5" cy="10.5" r="2"/><path d="M22 16l-5.5-5.5L10 17"/></svg></div>
           <span class="article-arrow" aria-hidden="true">&rarr;</span>
         </article>
 
@@ -226,6 +235,7 @@
             <h2 class="article-h">One workflow at a time: why focused improvement beats transformation programs</h2>
             <p class="article-excerpt">Large-scale operational transformation programs have a poor track record. The organizations that improve most consistently do it differently. One workflow, one problem, one team at a time.</p>
           </a>
+          <div class="article-thumb" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="8.5" cy="10.5" r="2"/><path d="M22 16l-5.5-5.5L10 17"/></svg></div>
           <span class="article-arrow" aria-hidden="true">&rarr;</span>
         </article>
 
@@ -239,6 +249,7 @@
             <h2 class="article-h">Human judgment is not a bug to be engineered away</h2>
             <p class="article-excerpt">There is a growing assumption that AI will eventually remove the need for human judgment in operational settings. We think this is wrong. And dangerously so in high-stakes environments.</p>
           </a>
+          <div class="article-thumb" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="8.5" cy="10.5" r="2"/><path d="M22 16l-5.5-5.5L10 17"/></svg></div>
           <span class="article-arrow" aria-hidden="true">&rarr;</span>
         </article>
 
@@ -252,6 +263,7 @@
             <h2 class="article-h">Aging assets, younger teams: the expertise gap no one is solving fast enough</h2>
             <p class="article-excerpt">Across utilities, municipalities, and infrastructure operators, the same problem is playing out in slow motion: experienced people are leaving and the knowledge transfer is not happening.</p>
           </a>
+          <div class="article-thumb" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="8.5" cy="10.5" r="2"/><path d="M22 16l-5.5-5.5L10 17"/></svg></div>
           <span class="article-arrow" aria-hidden="true">&rarr;</span>
         </article>
 
@@ -265,6 +277,7 @@
             <h2 class="article-h">What we mean when we say &ldquo;operational leverage&rdquo;</h2>
             <p class="article-excerpt">Leverage in operations is not about doing more with less. It is about making the work that matters most easier to do well, easier to hand off, and easier to improve over time.</p>
           </a>
+          <div class="article-thumb" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="8.5" cy="10.5" r="2"/><path d="M22 16l-5.5-5.5L10 17"/></svg></div>
           <span class="article-arrow" aria-hidden="true">&rarr;</span>
         </article>
 

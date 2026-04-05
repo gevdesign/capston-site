@@ -81,6 +81,8 @@
     .breadcrumb-sep { font-size: .65rem; }
 
     /* ARTICLE HEADER */
+    .article-hero-img { width: 100%; aspect-ratio: 16 / 9; background: var(--bg-dim); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; margin-bottom: 2.5rem; }
+    .article-hero-img svg { width: 48px; height: 48px; color: var(--faint); opacity: .35; }
     .article-header { padding: 2rem 0 2.5rem; border-bottom: 1px solid var(--border); margin-bottom: 2.5rem; }
     .article-meta { display: flex; align-items: center; gap: .75rem; margin-bottom: 1.1rem; flex-wrap: wrap; }
     .article-tag { font-size: var(--xs); font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--gold-dk); }
@@ -194,6 +196,14 @@
           <h1 class="article-h1">Why operational knowledge disappears. And what to do before it does</h1>
           <p class="article-lede">The most valuable knowledge in any infrastructure organization rarely lives in a system. It lives in people. Here is how to start closing that gap before the next wave of retirements.</p>
         </header>
+
+        <div class="article-hero-img" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <circle cx="8.5" cy="10.5" r="2"/>
+            <path d="M22 16l-5.5-5.5L10 17"/>
+          </svg>
+        </div>
 
         <article class="prose">
           <p>There is a pattern playing out across utilities, municipalities, and infrastructure operators that most organizations are aware of but few are acting on with any urgency. An experienced engineer or operator retires. Their replacement is hired. And somewhere in that transition, a significant amount of operational knowledge simply disappears.</p>
